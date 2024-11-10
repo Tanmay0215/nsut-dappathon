@@ -9,7 +9,7 @@ import { PetraWallet } from "petra-plugin-wallet-adapter";
 
 const wallets = [new PetraWallet()];
 
-createRoot(document.getElementById("root")).render(
+createRoot(document.getElementById("root") as HTMLElement).render(
   <AptosWalletAdapterProvider plugins={wallets} autoConnect={false}>
     <BrowserRouter>
       <AppContextProvider>

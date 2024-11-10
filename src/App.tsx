@@ -8,10 +8,9 @@ import Login from "./Pages/Login";
 import NotFound from "./Pages/NotFound";
 import Event from "./Pages/Event";
 import Payment2 from "./Pages/Payment2";
-import CreateEvent from "./Pages/CreateEvent";
 import BillingPage2 from "./Pages/BillingPage2";
 import About from "./Pages/About";
-import AptosInteract from "./Pages/AptosInteract";
+import NFTMinter from "./Pages/AptosInteract";
 
 function App() {
   return (
@@ -22,12 +21,11 @@ function App() {
           <Route path="/Events" element={<Events />} />
           <Route path="/Signup" element={<SignUp />} />
           <Route path="/Login" element={<Login />} />
-          <Route path="/CreateEvent" element={<CreateEvent />} />
           <Route path="/Billing/:id" element={<BillingPage2 />} />
           <Route path="/Event/:id" element={<Event />} />
           <Route path="/About" element={<About />} />
           <Route path="/Payment/:id" element={<Payment2 />} />
-          <Route path="/aptos" element={<AptosInteract />} />
+          <Route path="/aptos" element={<NFTMinter />} />
           <Route path="*" element={<NotFound />} />
         </Route>
       </Routes>
