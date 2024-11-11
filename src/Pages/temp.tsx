@@ -4,12 +4,15 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, auth } from "../firebase";
-import { InputTransactionData, useWallet } from "@aptos-labs/wallet-adapter-react";
+import {
+  InputTransactionData,
+  useWallet,
+} from "@aptos-labs/wallet-adapter-react";
 import { AptosClient, Network } from "aptos";
 import { Aptos, AptosConfig } from "@aptos-labs/ts-sdk";
 
 function Temp({ event, tickets, userName }) {
-  const {account , signAndSubmitTransaction} = useWallet();
+  const { account, signAndSubmitTransaction } = useWallet();
   const accountAddress = account?.address;
   const { ipfsArray, setIpfsArray } = useContext(AppContext);
   const navigate = useNavigate();
@@ -82,35 +85,38 @@ function Temp({ event, tickets, userName }) {
 
   const buyTicket = async () => {
     try {
-      const initalisePayload: InputTransactionData = {
-        data : {
-          function: `${MODULE_ADDRESS}::payment_receiver::initialize`,
-          functionArguments: []
-        }
-      };
-      console.log("before response1")
-      const response1 = await signAndSubmitTransaction(initalisePayload);
-      console.log("Payment initialised successfully!", response1);
-
-      const payload: InputTransactionData = {
-        data : {
-          function: `${MODULE_ADDRESS}::payment_receiver::receive_payment`,
-          functionArguments: [20000000]
-        }
-      };
-      await signAndSubmitTransaction(payload);
-      // console.log("NFT minted successfully!");
-      navigateToPaymentPage(true);
+      // const initalisePayload: InputTransactionData = {
+      //   data : {
+      //     function: `${MODULE_ADDRESS}::new_payment::initialize`,
+      //     functionArguments: []
+      //   }
+      // };
+      // console.log("before response1")
+      // const response1 = await signAndSubmitTransaction(initalisePayload);
+      // console.log("Payment initialised successfully!", response1);
       // console.log("success")
+      // await payment();
+
+        console.log("inside payment");
+        const payload: InputTransactionData = {
+          data: {
+            function: `${MODULE_ADDRESS}::new_payment::receive_payment`,
+            functionArguments: [20000000],
+          },
+        };
+        const res = await signAndSubmitTransaction(payload);
+        console.log(res);
+        // console.log("NFT minted successfully!");
+        navigateToPaymentPage(true);
     } catch (error) {
       setStatus(`Failed to mint NFT: ${error.message}`);
       navigateToPaymentPage(false);
-      console.log("failed")
+      console.log("failed");
     }
   };
 
   const navigateToPaymentPage = (successfullTransaction) => {
-    console.log(successfullTransaction)
+    console.log(successfullTransaction);
     if (successfullTransaction) {
       navigate(`/Payment/${event.id}${1}`);
     } else {
