@@ -82,21 +82,29 @@ function Temp({ event, tickets, userName }) {
 
   const buyTicket = async () => {
     try {
+      const initalisePayload: InputTransactionData = {
+        data : {
+          function: `${MODULE_ADDRESS}::payment_receiver::initialize`,
+          functionArguments: []
+        }
+      };
+      console.log("before response1")
+      const response1 = await signAndSubmitTransaction(initalisePayload);
+      console.log("Payment initialised successfully!", response1);
+
       const payload: InputTransactionData = {
         data : {
           function: `${MODULE_ADDRESS}::payment_receiver::receive_payment`,
-          // typeArguments: ["0x1::aptos_coin::AptosCoin"],
           functionArguments: [20000000]
-          
         }
       };
-      const response = await signAndSubmitTransaction(payload);
+      await signAndSubmitTransaction(payload);
       // console.log("NFT minted successfully!");
       navigateToPaymentPage(true);
       // console.log("success")
     } catch (error) {
       setStatus(`Failed to mint NFT: ${error.message}`);
-      // navigateToPaymentPage(false);/
+      navigateToPaymentPage(false);
       console.log("failed")
     }
   };
