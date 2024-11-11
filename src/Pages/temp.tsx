@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AppContext } from "../Context/AppContext";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { db, auth } from "../firebase";
-import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { InputTransactionData, useWallet } from "@aptos-labs/wallet-adapter-react";
 import { AptosClient, Network } from "aptos";
 import { Aptos, AptosConfig } from "@aptos-labs/ts-sdk";
 
@@ -23,7 +23,7 @@ function Temp({ event, tickets, userName }) {
   const pinataApiKey = import.meta.env.VITE_PINATA_API_KEY;
   const pinataApiSecret = import.meta.env.VITE_PINATA_SECRET;
   const MODULE_ADDRESS =
-    "0xfe7c2f5d4eac6747b2c3ecce0a3044ee1ddd12fc47b893f9f359690f288307c1";
+    "0x429a2ea89ca2833eced9a721a5c8b5a9575a5a5af5d30f93eb06a9275353aa0b";
 
   const deployToIpfs = async () => {
     setIpfsArray([]);
@@ -82,40 +82,22 @@ function Temp({ event, tickets, userName }) {
 
   const buyTicket = async () => {
     try {
-      console.log("hello")
-      const payload = {
+      const payload: InputTransactionData = {
         data : {
-          function: `${MODULE_ADDRESS}::new_nft::mint_nft`,
-          functionArguments: [accountAddress],
+          function: `${MODULE_ADDRESS}::payment_receiver::receive_payment`,
+          // typeArguments: ["0x1::aptos_coin::AptosCoin"],
+          functionArguments: [20000000]
+          
         }
       };
-      console.log(payload)
       const response = await signAndSubmitTransaction(payload);
-      console.log(response)
-
-      const mintedCount = await getMintedCount();
-      setTokensMinted(mintedCount);
-      setStatus("NFT minted successfully!");
-      // navigateToPaymentPage(true);
-      console.log("success")
+      // console.log("NFT minted successfully!");
+      navigateToPaymentPage(true);
+      // console.log("success")
     } catch (error) {
       setStatus(`Failed to mint NFT: ${error.message}`);
       // navigateToPaymentPage(false);/
       console.log("failed")
-    }
-  };
-
-  const getMintedCount = async () => {
-    try {
-      const resource = await client.view({
-        function: `${MODULE_ADDRESS}::simple_nft::get_token_minted`,
-        type_arguments: [],
-        arguments: [accountAddress],
-      });
-      return parseInt(resource[0]);
-    } catch (error) {
-      console.error("Failed to get minted count:", error);
-      return 0;
     }
   };
 

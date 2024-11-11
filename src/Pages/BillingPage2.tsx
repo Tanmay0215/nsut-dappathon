@@ -121,7 +121,6 @@ const BillingPage2 = () => {
                             <span className="flex justify-center items-center gap-x-2"><span>Price</span> <span className="text-yellow-400">:</span> <span className="text-red-500">{item.Price * tickets}</span></span>
 
                             {account ? (<Temp accountAddress={account} userName={user1.displayName} tickets={tickets} event={item}/>) : (<Temp tickets={tickets} event={item} />)}
-
                         </div>
                     </div>
                 </div>
